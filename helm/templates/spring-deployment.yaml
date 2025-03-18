@@ -1,19 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "my-helmchart.fullname" . }}
+  name: my-helmchart-spring
+  labels:
+    app: my-helmchart-spring
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "my-helmchart.fullname" . }}
+      app: my-helmchart-spring
   template:
     metadata:
       labels:
-        app: {{ include "my-helmchart.fullname" . }}
+        app: my-helmchart-spring
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: spring-app
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
