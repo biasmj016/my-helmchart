@@ -10,8 +10,21 @@ service:
   port: 80
   targetPort: 8080
 
-  # Istio 설정
+# Istio 설정
 istio:
   enabled: true
   gatewayPort: 80
   prefixPath: /sample
+
+# Grafana 설정
+grafana:
+  enabled: true
+  replicaCount: 1
+  adminPassword: "admin"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"

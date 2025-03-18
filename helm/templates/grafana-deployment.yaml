@@ -1,0 +1,49 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-helmchart-grafana
+  labels:
+    app: my-helmchart-grafana
+spec:
+  replicas: {{ .Values.grafana.replicaCount }}
+  selector:
+    matchLabels:
+      app: my-helmchart-grafana
+  template:
+    metadata:
+      labels:
+        app: my-helmchart-grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: "{{ .Values.grafana.adminPassword }}"
+          resources:
+            requests:
+              memory: {{ .Values.grafana.resources.requests.memory }}
+              cpu: {{ .Values.grafana.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.grafana.resources.limits.memory }}
+              cpu: {{ .Values.grafana.resources.limits.cpu }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-helmchart-grafana
+  labels:
+    app: my-helmchart-grafana
+spec:
+  type: ClusterIP
+  selector:
+    app: my-helmchart-grafana
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+{{- end }}
