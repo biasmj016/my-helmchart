@@ -11,7 +11,7 @@ service:
   targetPort: 8080
 
   # Istio 설정
-  istio:
-    enabled: true
-    gatewayPort: 80
-    prefixPath: /sample
+istio:
+  enabled: true
+  gatewayPort: 80
+  prefixPath: /sample
