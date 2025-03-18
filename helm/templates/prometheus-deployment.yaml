@@ -1,0 +1,46 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-helmchart-prometheus
+  labels:
+    app: my-helmchart-prometheus
+spec:
+  replicas: {{ .Values.prometheus.replicaCount }}
+  selector:
+    matchLabels:
+      app: my-helmchart-prometheus
+  template:
+    metadata:
+      labels:
+        app: my-helmchart-prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:latest
+          ports:
+            - containerPort: 9090
+          resources:
+            requests:
+              memory: {{ .Values.prometheus.resources.requests.memory }}
+              cpu: {{ .Values.prometheus.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.prometheus.resources.limits.memory }}
+              cpu: {{ .Values.prometheus.resources.limits.cpu }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-helmchart-prometheus
+  labels:
+    app: my-helmchart-prometheus
+spec:
+  type: ClusterIP
+  selector:
+    app: my-helmchart-prometheus
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9090
+{{- end }}
